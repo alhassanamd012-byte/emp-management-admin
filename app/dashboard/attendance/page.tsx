@@ -7,7 +7,7 @@ export default function AttendancePage() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
   const fetchAttendance = async () => {
-    const res = await fetch('http://localhost:5000/api/attendance', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/attendance', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();

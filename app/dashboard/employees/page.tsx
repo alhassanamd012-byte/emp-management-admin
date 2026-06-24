@@ -18,7 +18,7 @@ export default function EmployeesPage() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
   const fetchEmployees = async () => {
-    const res = await fetch('http://localhost:5000/api/employees', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/employees', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -30,7 +30,7 @@ export default function EmployeesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch('http://localhost:5000/api/employees', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/employees', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(form)
@@ -43,7 +43,7 @@ export default function EmployeesPage() {
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch(`http://localhost:5000/api/employees/${editEmployee._id}`, {
+    const res = await fetch(`https://emp-management-api-4icz.onrender.com/api/employees/${editEmployee._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(editEmployee)
@@ -55,7 +55,7 @@ export default function EmployeesPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this employee?')) return;
-    await fetch(`http://localhost:5000/api/employees/${id}`, {
+    await fetch(`https://emp-management-api-4icz.onrender.com/api/employees/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -251,4 +251,3 @@ export default function EmployeesPage() {
       </div>
     </div>
   );
-}

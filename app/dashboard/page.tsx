@@ -11,12 +11,12 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:5000/api/employees', {
+    fetch('https://emp-management-api-4icz.onrender.com/api/employees', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json()).then(data => {
       if (data.success) setStats(prev => ({ ...prev, totalEmployees: data.employees.length }));
     });
-    fetch('http://localhost:5000/api/attendance', {
+    fetch('https://emp-management-api-4icz.onrender.com/api/attendance', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json()).then(data => {
       if (data.success) {
@@ -28,7 +28,7 @@ export default function DashboardPage() {
         setStats(prev => ({ ...prev, presentToday: present, absentToday: todayAttendance.length - present }));
       }
     });
-    fetch('http://localhost:5000/api/salary', {
+    fetch('https://emp-management-api-4icz.onrender.com/api/salary', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json()).then(data => {
       if (data.success) {

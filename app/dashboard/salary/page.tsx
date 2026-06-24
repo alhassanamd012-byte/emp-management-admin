@@ -19,7 +19,7 @@ export default function SalaryPage() {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   const fetchSalaries = async () => {
-    const res = await fetch('http://localhost:5000/api/salary', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/salary', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -27,7 +27,7 @@ export default function SalaryPage() {
   };
 
   const fetchEmployees = async () => {
-    const res = await fetch('http://localhost:5000/api/employees', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/employees', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -39,7 +39,7 @@ export default function SalaryPage() {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch('http://localhost:5000/api/salary/generate', {
+    const res = await fetch('https://emp-management-api-4icz.onrender.com/api/salary/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(form)
@@ -51,7 +51,7 @@ export default function SalaryPage() {
 
   const handlePay = async (id: string) => {
     if (!confirm('Are you sure you want to mark this salary as paid?')) return;
-    await fetch(`http://localhost:5000/api/salary/${id}/pay`, {
+    await fetch(`https://emp-management-api-4icz.onrender.com/api/salary/${id}/pay`, {
       method: 'PUT',
       headers: { Authorization: `Bearer ${token}` }
     });
