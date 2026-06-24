@@ -14,7 +14,6 @@ export default function EmployeesPage() {
   const [editEmployee, setEditEmployee] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(emptyForm);
-  const [formKey, setFormKey] = useState(0);
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
@@ -91,24 +90,22 @@ export default function EmployeesPage() {
 
   return (
     <div style={{padding:'32px',background:'#f8fafc',minHeight:'100vh',width:'100%'}}>
-      {/* Header */}
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'32px'}}>
         <div>
           <h2 style={{fontSize:'28px',fontWeight:'700',color:'#1e293b',margin:0}}>Employees</h2>
           <p style={{color:'#64748b',marginTop:'4px',fontSize:'14px'}}>{employees.length} total employees</p>
         </div>
         <button
-          onClick={() => { setShowForm(true); setForm(emptyForm); setFormKey(k => k + 1); }}
+          onClick={() => { setShowForm(true); setForm(emptyForm); }}
           style={{background:'#1d4ed8',color:'white',padding:'10px 20px',borderRadius:'10px',border:'none',cursor:'pointer',fontSize:'14px',fontWeight:'600'}}
         >
           + Add Employee
         </button>
       </div>
 
-      {/* Add Modal */}
       {showForm && (
         <Modal title="Add New Employee" onClose={() => setShowForm(false)}>
-          <form key={formKey} onSubmit={handleSubmit} autoComplete="new-password">
+          <form onSubmit={handleSubmit} autoComplete="new-password">
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
               {fields.map(({ label, key, type }) => (
                 <div key={key}>
@@ -135,7 +132,6 @@ export default function EmployeesPage() {
         </Modal>
       )}
 
-      {/* Edit Modal */}
       {editEmployee && (
         <Modal title="Edit Employee" onClose={() => setEditEmployee(null)}>
           <form onSubmit={handleEdit}>
@@ -164,7 +160,6 @@ export default function EmployeesPage() {
         </Modal>
       )}
 
-      {/* View Modal */}
       {selectedEmployee && (
         <Modal title="Employee Details" onClose={() => setSelectedEmployee(null)}>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
@@ -202,7 +197,6 @@ export default function EmployeesPage() {
         </Modal>
       )}
 
-      {/* Employee Cards Grid */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'20px'}}>
         {employees.map((emp: any) => (
           <div key={emp._id} style={{background:'white',borderRadius:'16px',padding:'24px',boxShadow:'0 1px 3px rgba(0,0,0,0.1)',border:'1px solid #e2e8f0'}}>
@@ -252,4 +246,4 @@ export default function EmployeesPage() {
       </div>
     </div>
   );
-}
+            }
