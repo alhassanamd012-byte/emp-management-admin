@@ -14,6 +14,7 @@ export default function EmployeesPage() {
   const [editEmployee, setEditEmployee] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(emptyForm);
+  const [formKey, setFormKey] = useState(0);
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
@@ -97,7 +98,7 @@ export default function EmployeesPage() {
           <p style={{color:'#64748b',marginTop:'4px',fontSize:'14px'}}>{employees.length} total employees</p>
         </div>
         <button
-          onClick={() => { setShowForm(true); setForm(emptyForm); }}
+          onClick={() => { setShowForm(true); setForm(emptyForm); setFormKey(k => k + 1); }}
           style={{background:'#1d4ed8',color:'white',padding:'10px 20px',borderRadius:'10px',border:'none',cursor:'pointer',fontSize:'14px',fontWeight:'600'}}
         >
           + Add Employee
@@ -107,7 +108,7 @@ export default function EmployeesPage() {
       {/* Add Modal */}
       {showForm && (
         <Modal title="Add New Employee" onClose={() => setShowForm(false)}>
-          <form onSubmit={handleSubmit}>
+          <form key={formKey} onSubmit={handleSubmit} autoComplete="new-password">
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
               {fields.map(({ label, key, type }) => (
                 <div key={key}>
@@ -117,7 +118,7 @@ export default function EmployeesPage() {
                     value={form[key as keyof typeof emptyForm]}
                     onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                     required
-                    style={{width:'100%',border:'1px solid #e2e8f0',borderRadius:'8px',padding:'10px 12px',fontSize:'14px',outline:'none',boxSizing:'border-box'}}
+                    style={{width:'100%',border:'1px solid #e2e8f0',borderRadius:'8px',padding:'10px 12px',fontSize:'14px',outline:'none',boxSizing:'border-box'}} autoComplete="new-password"
                   />
                 </div>
               ))}
@@ -146,7 +147,7 @@ export default function EmployeesPage() {
                     type={type}
                     value={editEmployee[key] || ''}
                     onChange={(e) => setEditEmployee({ ...editEmployee, [key]: e.target.value })}
-                    style={{width:'100%',border:'1px solid #e2e8f0',borderRadius:'8px',padding:'10px 12px',fontSize:'14px',outline:'none',boxSizing:'border-box'}}
+                    style={{width:'100%',border:'1px solid #e2e8f0',borderRadius:'8px',padding:'10px 12px',fontSize:'14px',outline:'none',boxSizing:'border-box'}} autoComplete="off"
                   />
                 </div>
               ))}
@@ -251,3 +252,4 @@ export default function EmployeesPage() {
       </div>
     </div>
   );
+}
