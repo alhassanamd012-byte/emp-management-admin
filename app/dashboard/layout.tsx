@@ -23,6 +23,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/employees', label: 'Employees', icon: '👥' },
     { href: '/dashboard/attendance', label: 'Attendance', icon: '📅' },
     { href: '/dashboard/salary', label: 'Salary', icon: '💰' },
+    { href: '/dashboard/leaves', label: 'Leave Requests', icon: '📝' },
+    { href: '/dashboard/notifications', label: 'Notifications', icon: '🔔' },
   ];
 
   return (
