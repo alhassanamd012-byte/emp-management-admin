@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 export default function NotificationsPage() {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState('all');
+  const sendingRef = useRef(false);
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
   useEffect(() => {
     fetch('https://emp-management-api-4icz.onrender.com/api/employees', {
@@ -17,6 +18,8 @@ export default function NotificationsPage() {
       alert('Please enter title and message');
       return;
     }
+    if (sendingRef.current) return;
+    sendingRef.current = true;
     setLoading(true);
     try {
       const url = selectedEmployee === 'all'
@@ -42,6 +45,7 @@ export default function NotificationsPage() {
       alert('Cannot connect to server');
     } finally {
       setLoading(false);
+      sendingRef.current = false;
     }
   };
   return (
@@ -120,4 +124,4 @@ export default function NotificationsPage() {
       </div>
     </div>
   );
-}
+          }
