@@ -1,7 +1,16 @@
 'use client';
 import { useEffect, useState } from 'react';
+const FILTERS = [
+  { label: 'Last 2 Hours', value: '2h' },
+  { label: 'Last 1 Day', value: '1d' },
+  { label: 'Last 1 Week', value: '1w' },
+  { label: 'Last 1 Month', value: '1m' },
+  { label: 'All Time', value: 'all' },
+];
+
 export default function LeavesPage() {
   const [leaves, setLeaves] = useState<any[]>([]);
+  const [dateFilter, setDateFilter] = useState('all');
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
   const fetchLeaves = async () => {
     const res = await fetch('https://emp-management-api-4icz.onrender.com/api/leaves', {
@@ -36,6 +45,18 @@ export default function LeavesPage() {
     approved: { background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0' },
     rejected: { background: '#fff1f2', color: '#dc2626', border: '1px solid #fecdd3' },
   };
+  const getDateCutoff = () => {
+    const now = Date.now();
+    if (dateFilter === '2h') return now - 7200000;
+    if (dateFilter === '1d') return now - 86400000;
+    if (dateFilter === '1w') return now - 604800000;
+    if (dateFilter === '1m') return now - 2592000000;
+    return 0;
+  };
+  const filteredLeaves = dateFilter === 'all' ? leaves : leaves.filter(l => {
+    const d = l.createdAt ? new Date(l.createdAt) : new Date(l.leaveDate);
+    return d.getTime() >= getDateCutoff();
+  });
   return (
     <div style={{ padding: '32px' }}>
       <div style={{ marginBottom: '32px' }}>
@@ -44,9 +65,9 @@ export default function LeavesPage() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px' }}>
         {[
-          { label: 'Total Requests', value: leaves.length, color: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe', icon: '📋' },
-          { label: 'Pending', value: leaves.filter(l => l.status === 'pending').length, color: '#d97706', bg: '#fffbeb', border: '#fde68a', icon: '⏳' },
-          { label: 'Approved', value: leaves.filter(l => l.status === 'approved').length, color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', icon: '✅' },
+          { label: 'Total Requests', value: filteredLeaves.length, color: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe', icon: '📋' },
+          { label: 'Pending', value: filteredLeaves.filter(l => l.status === 'pending').length, color: '#d97706', bg: '#fffbeb', border: '#fde68a', icon: '⏳' },
+          { label: 'Approved', value: filteredLeaves.filter(l => l.status === 'approved').length, color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', icon: '✅' },
         ].map(({ label, value, color, bg, border, icon }) => (
           <div key={label} style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ width: '52px', height: '52px', borderRadius: '12px', background: bg, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>{icon}</div>
@@ -58,8 +79,17 @@ export default function LeavesPage() {
         ))}
       </div>
       <div style={{ background: 'white', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
           <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', margin: 0 }}>All Leave Requests</h3>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {FILTERS.map(f => (
+              <button
+                key={f.value}
+                onClick={() => setDateFilter(f.value)}
+                style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid', borderColor: dateFilter === f.value ? '#1d4ed8' : '#e2e8f0', background: dateFilter === f.value ? '#1d4ed8' : 'white', color: dateFilter === f.value ? 'white' : '#475569', fontSize: '13px', fontWeight: '500', cursor: 'pointer' }}
+              >{f.label}</button>
+            ))}
+          </div>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -71,7 +101,7 @@ export default function LeavesPage() {
               </tr>
             </thead>
             <tbody>
-              {leaves.map((leave: any) => (
+              {filteredLeaves.map((leave: any) => (
                 <tr key={leave._id} style={{ borderTop: '1px solid #f1f5f9' }}>
                   <td style={{ padding: '16px 20px', fontSize: '14px', fontWeight: '600', color: '#1e293b', whiteSpace: 'nowrap' }}>{leave.employee?.name || 'N/A'}</td>
                   <td style={{ padding: '16px 20px', fontSize: '14px', color: '#64748b', whiteSpace: 'nowrap' }}>{leave.employee?.department || 'N/A'}</td>
@@ -102,7 +132,7 @@ export default function LeavesPage() {
                   </td>
                 </tr>
               ))}
-              {leaves.length === 0 && (
+              {filteredLeaves.length === 0 && (
                 <tr>
                   <td colSpan={6} style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
                     <div style={{ fontSize: '40px', marginBottom: '12px' }}>📋</div>
