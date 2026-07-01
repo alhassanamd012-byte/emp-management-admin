@@ -25,6 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/salary', label: 'Salary', icon: '💰' },
     { href: '/dashboard/leaves', label: 'Leave Requests', icon: '📝' },
     { href: '/dashboard/notifications', label: 'Notifications', icon: '🔔' },
+    { href: '/dashboard/live-status', label: 'Live Status', icon: '📍' },
   ];
 
   return (
@@ -37,7 +38,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', margin: '4px 0 0' }}>Employee Management</p>
         </div>
         {/* Nav */}
-        <nav style={{ flex: 1, padding: '16px 12px' }}>
+        <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
           {navItems.map(({ href, label, icon }) => {
             const isActive = pathname === href;
             return (
